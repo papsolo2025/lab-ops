@@ -56,7 +56,7 @@ case "${1:-}" in
     # Two "console changes". Terraform plan catches one of them but not the other - find out which and why.
     aws rds modify-db-instance --region "$REGION" --db-instance-identifier devops-lab-orders-db \
       --backup-retention-period 1 --apply-immediately >/dev/null
-    sg=$(aws ec2 describe-security-groups --region "$REGION" --filters Name=group-name,Values=devops-lab-admin-access \
+    sg=$(aws ec2 describe-security-groups --region "$REGION" --filters Name=group-name,Values=devops-lab-servers \
       --query 'SecurityGroups[0].GroupId' --output text)
     aws ec2 authorize-security-group-ingress --region "$REGION" --group-id "$sg" \
       --ip-permissions 'IpProtocol=tcp,FromPort=3306,ToPort=3306,IpRanges=[{CidrIp=0.0.0.0/0,Description=temp-debug}]' >/dev/null
