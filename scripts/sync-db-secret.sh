@@ -30,7 +30,7 @@ for ns in $NAMESPACES; do
     ok "created database $dbname"
   fi
 
-  kubectl get ns "$ns" >/dev/null 2>&1 || kubectl create ns "$ns"
+  kubectl get ns "$ns" >/dev/null 2>&1 || { fail "namespace $ns missing - run lab-platform/install.sh (Jenkins can't create namespaces)"; continue; }
   old_hash=$(kubectl -n "$ns" get secret orders-db -o jsonpath='{.metadata.annotations.lab/password-hash}' 2>/dev/null || true)
 
   kubectl -n "$ns" create secret generic orders-db \
